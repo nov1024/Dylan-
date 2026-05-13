@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书馆大数据可视化智慧大屏</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="particleCanvas"></canvas>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <div class="date-box">
+                    <span class="label">日期</span>
+                    <span class="date" id="currentDate"></span>
+                </div>
+            </div>
+            <div class="title-wrapper">
+                <div class="title-glow"></div>
+                <h1 class="title">
+                    <span class="title-deco left">&#9668;&#9668;</span>
+                    图书馆大数据可视化智慧大屏
+                    <span class="title-deco right">&#9658;&#9658;</span>
+                </h1>
+                <div class="title-sub">LIBRARY BIG DATA VISUALIZATION</div>
+            </div>
+            <div class="header-right">
+                <div class="time-box">
+                    <span class="label">时间</span>
+                    <span class="time" id="currentTime"></span>
+                </div>
+            </div>
+        </header>
+        <main class="main-content">
+            <aside class="panel left-panel">
+                <div class="chart-box">
+                    <div class="box-title"><span class="icon pulse">&#128214;</span><span class="title-text">馆藏资源统计</span><span class="title-line"></span></div>
+                    <div class="chart" id="collectionChart"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="box-title"><span class="icon pulse">&#128209;</span><span class="title-text">图书分类占比</span><span class="title-line"></span></div>
+                    <div class="chart" id="categoryPieChart"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="box-title"><span class="icon pulse">&#128101;</span><span class="title-text">读者构成分析</span><span class="title-line"></span></div>
+                    <div class="chart" id="readerChart"></div>
+                </div>
+            </aside>
+            <section class="panel center-panel">
+                <div class="stats-row">
+                    <div class="stat-card" data-stat="collection">
+                        <div class="stat-icon-wrapper"><div class="stat-icon">&#128218;</div><div class="stat-ring"></div></div>
+                        <div class="stat-info"><div class="stat-value" id="totalCollection">565,000</div><div class="stat-label">馆藏总量（册）</div></div>
+                    </div>
+                    <div class="stat-card" data-stat="visitors">
+                        <div class="stat-icon-wrapper"><div class="stat-icon">&#128694;</div><div class="stat-ring"></div></div>
+                        <div class="stat-info"><div class="stat-value" id="currentVisitors">923</div><div class="stat-label">当前在馆（人）</div></div>
+                    </div>
+                    <div class="stat-card" data-stat="borrow">
+                        <div class="stat-icon-wrapper"><div class="stat-icon">&#128444;</div><div class="stat-ring"></div></div>
+                        <div class="stat-info"><div class="stat-value" id="todayBorrow">312</div><div class="stat-label">今日借阅（次）</div></div>
+                    </div>
+                    <div class="stat-card" data-stat="return">
+                        <div class="stat-icon-wrapper"><div class="stat-icon">&#128449;</div><div class="stat-ring"></div></div>
+                        <div class="stat-info"><div class="stat-value" id="todayReturn">287</div><div class="stat-label">今日归还（次）</div></div>
+                    </div>
+                </div>
+                <div class="chart-box large">
+                    <div class="box-title"><span class="icon pulse">&#128200;</span><span class="title-text">今日出入馆流量监控</span><span class="sub-info">入馆: 2,946 | 出馆: 2,341</span></div>
+                    <div class="chart" id="entryChart"></div>
+                </div>
+                <div class="chart-box large">
+                    <div class="box-title"><span class="icon pulse">&#128202;</span><span class="title-text">近30天借阅归还趋势分析</span><span class="title-line"></span></div>
+                    <div class="chart" id="trendChart"></div>
+                </div>
+            </section>
+            <aside class="panel right-panel">
+                <div class="chart-box">
+                    <div class="box-title"><span class="icon pulse">&#128202;</span><span class="title-text">图书分类藏量排行</span><span class="title-line"></span></div>
+                    <div class="chart" id="categoryBarChart"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="box-title"><span class="icon pulse">&#128293;</span><span class="title-text">热门图书 TOP10</span><span class="title-line"></span></div>
+                    <div class="hot-books-list" id="hotBooksList"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="box-title"><span class="icon pulse">&#128218;</span><span class="title-text">借阅分类统计</span><span class="title-line"></span></div>
+                    <div class="chart" id="borrowCategoryChart"></div>
+                </div>
+            </aside>
+        </main>
+        <footer class="footer">
+            <div class="footer-item"><span>数据更新周期: 5秒</span></div>
+            <div class="footer-item"><span>上次更新：</span><span id="updateTime">--</span></div>
+            <div class="footer-item"><span class="status-dot active"></span><span>系统状态: 正常运行</span></div>
+            <div class="footer-item"><span>数据库: SQLite3 | API: v2.0</span></div>
+            <div class="footer-item"><span>智慧图书馆大数据平台 v2.0</span></div>
+        </footer>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>

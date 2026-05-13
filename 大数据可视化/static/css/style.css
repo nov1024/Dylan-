@@ -1,0 +1,693 @@
+/* ============================================
+   图书馆大数据可视化大屏 - 增强版样式
+   深蓝科技风格 + 动态粒子背景 + 流光边框
+   ============================================ */
+
+/* ---- 全局重置 ---- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ---- 粒子背景画布 ---- */
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ---- 基础样式 ---- */
+body {
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', sans-serif;
+    background: linear-gradient(135deg, #070f2d 0%, #0a1a4a 30%, #0d2060 60%, #081840 100%);
+    min-height: 100vh;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* 背景网格装饰 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ---- 容器 ---- */
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100vh;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================
+   头部标题栏
+   ============================================ */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 35px;
+    background: linear-gradient(90deg,
+        rgba(0, 80, 180, 0.2) 0%,
+        rgba(0, 150, 220, 0.4) 30%,
+        rgba(0, 180, 255, 0.5) 50%,
+        rgba(0, 150, 220, 0.4) 70%,
+        rgba(0, 80, 180, 0.2) 100%);
+    border-bottom: 2px solid rgba(0, 212, 255, 0.8);
+    box-shadow:
+        0 0 40px rgba(0, 212, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 212, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 20px 20px;
+}
+
+/* 头部流光动画 */
+.header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(0, 212, 255, 0.1),
+        transparent);
+    animation: headerShine 6s ease-in-out infinite;
+}
+
+@keyframes headerShine {
+    0%, 100% { left: -100%; }
+    50% { left: 100%; }
+}
+
+/* 标题区域 */
+.title-wrapper {
+    text-align: center;
+    position: relative;
+}
+
+.title-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 150%;
+    background: radial-gradient(ellipse,
+        rgba(0, 212, 255, 0.15) 0%,
+        transparent 70%);
+    pointer-events: none;
+}
+
+.title {
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 6px;
+    position: relative;
+    z-index: 1;
+}
+
+.title .title-deco {
+    color: #00d4ff;
+    font-size: 20px;
+    margin: 0 15px;
+    opacity: 0.8;
+    animation: decoPulse 2s ease-in-out infinite;
+}
+
+.title .title-deco.right {
+    animation-delay: 1s;
+}
+
+@keyframes decoPulse {
+    0%, 100% { opacity: 0.5; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
+
+.title-sub {
+    font-size: 13px;
+    color: rgba(0, 212, 255, 0.6);
+    letter-spacing: 8px;
+    margin-top: 6px;
+    text-transform: uppercase;
+}
+
+/* 头部左右信息 */
+.header-left, .header-right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 220px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-right {
+    align-items: flex-end;
+}
+
+.date-box, .time-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.date-box .label, .time-box .label {
+    font-size: 12px;
+    color: rgba(0, 212, 255, 0.7);
+}
+
+.date, .time {
+    font-size: 18px;
+    color: #00d4ff;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+}
+
+.weather-info, .system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(0, 212, 255, 0.8);
+    padding: 4px 16px;
+}
+
+.weather-icon {
+    font-size: 18px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(0, 255, 136, 0.8); }
+    50% { opacity: 0.4; box-shadow: 0 0 5px rgba(0, 255, 136, 0.3); }
+}
+
+/* ============================================
+   主体内容区
+   ============================================ */
+.main-content {
+    flex: 1;
+    display: flex;
+    gap: 18px;
+    padding: 18px 0;
+    position: relative;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.left-panel, .right-panel {
+    width: 24%;
+}
+
+.center-panel {
+    width: 52%;
+}
+
+/* ============================================
+   图表盒子 - 流光边框效果
+   ============================================ */
+.chart-box {
+    position: relative;
+    background: linear-gradient(180deg,
+        rgba(0, 100, 200, 0.25) 0%,
+        rgba(0, 50, 120, 0.4) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 12px;
+    padding: 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+        0 0 25px rgba(0, 212, 255, 0.08),
+        inset 0 0 25px rgba(0, 212, 255, 0.03);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+/* 四角装饰 */
+.chart-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    background:
+        linear-gradient(90deg, #00d4ff 2px, transparent 2px) top left no-repeat,
+        linear-gradient(90deg, #00d4ff 2px, transparent 2px) top right no-repeat,
+        linear-gradient(90deg, #00d4ff 2px, transparent 2px) bottom left no-repeat,
+        linear-gradient(90deg, #00d4ff 2px, transparent 2px) bottom right no-repeat;
+    background-size: 25px 2px, 25px 2px, 25px 2px, 25px 2px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.chart-box:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow:
+        0 0 35px rgba(0, 212, 255, 0.15),
+        inset 0 0 30px rgba(0, 212, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.chart-box.large {
+    flex: 1.3;
+}
+
+/* 盒子标题 */
+.box-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #00d4ff;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.box-title .icon {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.box-title .icon.pulse {
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.box-title .title-text {
+    flex: 1;
+}
+
+.box-title .title-line {
+    flex: 1;
+    height: 1px;
+    margin-left: 12px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.4), transparent);
+}
+
+.box-title .sub-info {
+    margin-left: auto;
+    font-size: 12px;
+    color: rgba(0, 212, 255, 0.7);
+    font-weight: normal;
+    padding: 4px 12px;
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 4px;
+}
+
+.chart {
+    flex: 1;
+    min-height: 200px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
+   统计卡片 - 3D悬浮效果
+   ============================================ */
+.stats-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.stat-card {
+    flex: 1;
+    position: relative;
+    background: linear-gradient(135deg,
+        rgba(0, 120, 220, 0.3) 0%,
+        rgba(0, 60, 130, 0.5) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.35);
+    border-radius: 14px;
+    padding: 22px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow:
+        0 4px 20px rgba(0, 212, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+/* 卡片顶部光效 */
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent,
+        #00d4ff,
+        transparent);
+    opacity: 0.6;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow:
+        0 8px 30px rgba(0, 212, 255, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.6);
+}
+
+/* 图标包装 */
+.stat-icon-wrapper {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-icon {
+    font-size: 32px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 旋转光环 */
+.stat-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    border-top-color: rgba(0, 212, 255, 0.5);
+    border-radius: 50%;
+    animation: ringRotate 3s linear infinite;
+}
+
+.stat-ring::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border: 1px solid transparent;
+    border-bottom-color: rgba(0, 255, 136, 0.4);
+    border-radius: 50%;
+    animation: ringRotate 4s linear infinite reverse;
+}
+
+@keyframes ringRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #00d4ff;
+    text-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    font-family: 'Courier New', monospace;
+    animation: countUp 0.6s ease-out;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: rgba(0, 212, 255, 0.65);
+    margin-top: 6px;
+    letter-spacing: 1px;
+}
+
+/* ============================================
+   热门图书列表
+   ============================================ */
+.hot-books-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.hot-book-item {
+    display: flex;
+    align-items: center;
+    padding: 11px 12px;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg,
+        rgba(0, 100, 200, 0.2) 0%,
+        rgba(0, 60, 140, 0.15) 100%);
+    border-radius: 8px;
+    border-left: 3px solid #00d4ff;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.hot-book-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.35s;
+}
+
+.hot-book-item:hover {
+    transform: translateX(8px);
+    background: rgba(0, 150, 255, 0.25);
+    border-left-color: #00ff88;
+}
+
+.hot-book-item:hover::before {
+    opacity: 1;
+}
+
+.hot-book-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    margin-right: 12px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hot-book-rank.top1 {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+}
+
+.hot-book-rank.top2 {
+    background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
+    color: #000;
+    box-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
+}
+
+.hot-book-rank.top3 {
+    background: linear-gradient(135deg, #cd7f32, #b87333);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(205, 127, 50, 0.3);
+}
+
+.hot-book-rank.normal {
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.hot-book-info {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.hot-book-name {
+    font-size: 13px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+}
+
+.hot-book-author {
+    font-size: 11px;
+    color: rgba(0, 212, 255, 0.6);
+    margin-top: 3px;
+}
+
+.hot-book-times {
+    font-size: 14px;
+    color: #00ff88;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    font-family: 'Courier New', monospace;
+}
+
+/* ============================================
+   底部信息栏
+   ============================================ */
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    padding: 16px;
+    background: linear-gradient(90deg,
+        rgba(0, 60, 140, 0.2) 0%,
+        rgba(0, 100, 200, 0.35) 50%,
+        rgba(0, 60, 140, 0.2) 100%);
+    border-top: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 14px 14px 0 0;
+    margin-top: 8px;
+}
+
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(0, 212, 255, 0.7);
+}
+
+.footer-icon {
+    font-size: 14px;
+}
+
+.status-dot.active {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* ============================================
+   滚动条样式
+   ============================================ */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.4);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.7);
+}
+
+/* ============================================
+   数字动画关键帧
+   ============================================ */
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   加载动画
+   ============================================ */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 212, 255, 0.2);
+    border-top-color: #00d4ff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ============================================
+   响应式适配
+   ============================================ */
+@media (max-width: 1400px) {
+    .left-panel, .right-panel {
+        width: 26%;
+    }
+    .center-panel {
+        width: 48%;
+    }
+    .title {
+        font-size: 28px;
+    }
+}
